@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Thumbnail Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="toggle-theme">
+    <button id="themeBtn">Switch to Light Mode</button>
+    
+    <!-- MP4 / MP3 Download Buttons -->
+    {% if mp4_link %}
+    <div class="video-downloads">
+        <button onclick="window.location.href='{{ mp4_link }}'">Download MP4</button>
+        <button onclick="window.location.href='{{ mp3_link }}'">Download MP3</button>
+    </div>
+    {% endif %}
+</div>
+
+<div class="box">
+    <h2>YouTube Thumbnail Downloader</h2>
+
+    <form method="POST">
+        <input type="text" name="url" placeholder="Paste YouTube Video URL" required autofocus>
+        <button type="submit" id="fetchBtn">Get Thumbnail</button>
+    </form>
+
+    <div id="loading" class="loading">Fetching thumbnails...</div>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if video_title %}
+        <h3 class="video-title">{{ video_title }}</h3>
+    {% endif %}
+
+    {% if thumbnails %}
+        <hr>
+        <div class="grid">
+        {% for quality, link in thumbnails.items() %}
+            <div class="thumb-box">
+                <h4>{{ quality }}</h4>
+                <img src="{{ link }}">
+                <div class="btns">
+                    <button class="downloadBtn" data-link="{{ link }}">Download</button>
+                    <button class="copyBtn" data-link="{{ link }}">Copy URL</button>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
+python app.py
